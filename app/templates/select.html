@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select PDFs</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+        <h1 class="text-2xl font-bold text-center text-gray-700 mb-6">Select PDFs to Combine</h1>
+        
+        <p class="text-center text-gray-600 mb-4">You can reorder the files by dragging them. Select the files you want to include in the combined PDF.</p>
+        
+        <form action="{{ url_for('combine') }}" method="post" id="file-form" class="space-y-4">
+            <ul id="file-list" class="space-y-2">
+                {% for file in files %}
+                <li class="flex items-center justify-between p-4 bg-gray-200 rounded border border-gray-300 cursor-move" draggable="true">
+                    <!-- Checkbox for selecting files -->
+                    <label class="flex items-center">
+                        <input type="checkbox" name="files" value="{{ file }}" checked class="mr-2">
+                        <span class="text-gray-700">{{ file }}</span>
+                    </label>
+                    <input type="hidden" name="ordered_files" value="{{ file }}">
+                </li>
+                {% endfor %}
+            </ul>
+            <div class="text-center mt-6">
+                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full">
+                    Combine Selected
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const fileList = document.getElementById('file-list');
+        let draggedItem = null;
+
+        fileList.addEventListener('dragstart', (e) => {
+            draggedItem = e.target;
+            setTimeout(() => {
+                e.target.style.display = 'none';
+            }, 0);
+        });
+
+        fileList.addEventListener('dragend', (e) => {
+            setTimeout(() => {
+                draggedItem.style.display = 'block';
+                draggedItem = null;
+            }, 0);
+        });
+
+        fileList.addEventListener('dragover', (e) => e.preventDefault());
+
+        fileList.addEventListener('dragenter', (e) => {
+            if (e.target.tagName === 'LI') e.target.style.border = '2px dashed #000';
+        });
+
+        fileList.addEventListener('dragleave', (e) => {
+            if (e.target.tagName === 'LI') e.target.style.border = 'none';
+        });
+
+        fileList.addEventListener('drop', (e) => {
+            if (e.target.tagName === 'LI') {
+                e.target.style.border = 'none';
+                fileList.insertBefore(draggedItem, e.target.nextSibling);
+            }
+        });
+
+        document.getElementById('file-form').addEventListener('submit', (e) => {
+            // Remove hidden inputs for unselected files
+            const checkboxes = document.querySelectorAll('input[name="files"]');
+            checkboxes.forEach((checkbox, index) => {
+                const hiddenInput = fileList.children[index].querySelector('input[name="ordered_files"]');
+                if (!checkbox.checked) {
+                    hiddenInput.remove();
+                } else {
+                    hiddenInput.value = checkbox.value; // Update value for reordering
+                }
+            });
+        });
+    </script>
+</body>
+</html>

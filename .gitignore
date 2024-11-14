@@ -1,0 +1,74 @@
+# Python artifacts
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Flask environment and configuration files
+.env
+*.env
+instance/
+config.py
+config.yaml
+config.json
+
+# Virtual environment
+venv/
+.venv/
+env/
+ENV/
+
+# Installed packages
+*.egg-info/
+.eggs/
+*.egg
+*.manifest
+*.spec
+
+# Coverage and testing
+.coverage
+.cache/
+.pytest_cache/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.hypothesis/
+
+# Logs and debug output
+*.log
+*.pid
+*.out
+*.err
+
+# Database and uploads
+*.sqlite3
+*.db
+uploads/
+uploaded_pdfs/
+
+# Docker files
+*.env.docker
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# macOS and Linux
+.DS_Store
+*.swp
+.swo
+
+# Windows
+Thumbs.db
+desktop.ini
